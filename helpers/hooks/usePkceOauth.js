@@ -63,7 +63,7 @@ const usePkceOauth = config => {
         const response = await tokenResponse.json();
         // Save some values for use later in our app. SecureSave lets us store these
         // values encrypted and in a safe manner.
-        // Very important for Access and Refresh Token.
+        // Very important to do for Access and Refresh Token.
         await SecureSave({
           key: 'squareAccessToken',
           value: response.access_token,
@@ -78,6 +78,7 @@ const usePkceOauth = config => {
           didError: false,
           description: '',
         });
+        routeParams.code = null;
       };
       obtainToken();
     }

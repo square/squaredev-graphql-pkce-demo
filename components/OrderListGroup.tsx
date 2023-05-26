@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {graphqlListOrders} from '../helpers/fetchRequests';
 
@@ -22,7 +28,7 @@ interface Order {
 
 const OrderListGroup = ({selectedLocation}: OrderListGroupProps) => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const getOrders = async (locationId: string) => {
     const merchantId = await AsyncStorage.getItem('merchantId');
@@ -104,7 +110,7 @@ const OrderListGroup = ({selectedLocation}: OrderListGroupProps) => {
 
   const renderItems = (items: any[], orderIndex: number) => {
     return items.map((item, itemIndex) => (
-      <View key={itemIndex}>
+      <View style={styles.orderItemsContainer} key={itemIndex}>
         <Text style={styles.itemName}>{item.name}</Text>
         {renderTodos(item.todos, orderIndex, itemIndex)}
       </View>
@@ -114,19 +120,29 @@ const OrderListGroup = ({selectedLocation}: OrderListGroupProps) => {
   const renderOrders = () => {
     if (orders.length) {
       return orders.map((order, orderIndex) => (
-        <View key={orderIndex}>
+        <View style={styles.orderContainer} key={orderIndex}>
           <Text style={styles.orderName}>{order.name}</Text>
           {renderItems(order.items, orderIndex)}
         </View>
       ));
     } else {
-      return <Text>No Data bb</Text>;
+      return (
+        <Text style={styles.orderName}>
+          No orders available at this location!
+        </Text>
+      );
     }
   };
 
   return (
     <View style={styles.container}>
-      {isLoading ? <Text>Loading!</Text> : renderOrders()}
+      {isLoading ? (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        renderOrders()
+      )}
     </View>
   );
 };
@@ -139,7 +155,6 @@ const styles = StyleSheet.create({
   orderName: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
   },
   itemName: {
     fontSize: 18,
@@ -163,6 +178,12 @@ const styles = StyleSheet.create({
   },
   todoTextCompleted: {
     textDecorationLine: 'line-through',
+  },
+  orderItemsContainer: {
+    marginLeft: 8,
+  },
+  orderContainer: {
+    marginBottom: 16,
   },
 });
 

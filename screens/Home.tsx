@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
 import StyledButton from '../components/StyledButton';
 import {useIsAuthed} from '../context/AuthContext';
 import {
@@ -68,7 +68,9 @@ const Home = ({navigation}: {navigation: any}) => {
     <>
       <View style={styles.container}>
         {isLoading ? (
-          <Text>Loading</Text>
+          <View style={styles.spinnerContainer}>
+            <ActivityIndicator size="large" />
+          </View>
         ) : hasToken ? (
           <View style={styles.body}>
             <LocationSelect
@@ -116,6 +118,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5DEB3',
+    height: '100%',
+  },
+  spinnerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     height: '100%',
   },
   pickerContainer: {
