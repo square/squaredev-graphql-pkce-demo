@@ -415,16 +415,16 @@ program
   .description('creates test data for customers, catalog items and orders')
   .action(async () => {
     const locationIds = await createTestLocations();
-    // const customerIds = await createTestCustomers();
-    // const objects = await createCatalogObjects();
-    // const variations = filterItemVariations(objects);
-    // if (!customerIds.length || !variations.length) {
-    //   console.error(
-    //     'No customers or item variations to create orders for. Exiting script',
-    //   );
-    //   return;
-    // }
-    // await createOrders(customerIds, locationIds, variations);
+    const customerIds = await createTestCustomers();
+    const objects = await createCatalogObjects();
+    const variations = filterItemVariations(objects);
+    if (!customerIds.length || !variations.length) {
+      console.error(
+        'No customers or item variations to create orders for. Exiting script',
+      );
+      return;
+    }
+    await createOrders(customerIds, locationIds, variations);
   });
 
 program
