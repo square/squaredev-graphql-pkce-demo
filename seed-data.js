@@ -414,7 +414,12 @@ program
   .command('generate')
   .description('creates test data for customers, catalog items and orders')
   .action(async () => {
-    const locationIds = await createTestLocations();
+    const locationIds = [
+      'L0TDFJ3H2Z6JS',
+      'LF5E8GS15ABTR',
+      'LMA12P1DWR8S6',
+      'L40RRBZK66B30',
+    ]; //await createTestLocations();
     const customerIds = await createTestCustomers();
     const objects = await createCatalogObjects();
     const variations = filterItemVariations(objects);
