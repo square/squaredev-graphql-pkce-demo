@@ -53,6 +53,184 @@
             }
         }
     ],
+    "team": [
+        {
+            "teamMember": {
+                "familyName": "Parker",
+                "givenName": "Taylor",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Adams",
+                "givenName": "Casey",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Kelly",
+                "givenName": "Jordan",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Morgan",
+                "givenName": "Riley",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Bailey",
+                "givenName": "Charlie",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Brooks",
+                "givenName": "Alex",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Ellis",
+                "givenName": "Jamie",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Carter",
+                "givenName": "Dakota",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Clark",
+                "givenName": "Sam",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Sullivan",
+                "givenName": "Reese",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Edwards",
+                "givenName": "Quinn",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Hayes",
+                "givenName": "Finley",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Cooper",
+                "givenName": "Rowan",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Reed",
+                "givenName": "Morgan",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Bennett",
+                "givenName": "Kelly",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        },
+        {
+            "teamMember": {
+                "familyName": "Thompson",
+                "givenName": "Reese",
+                "status": "ACTIVE",
+                "assignedLocations": {
+                  "assignmentType": "EXPLICIT_LOCATIONS",
+                  "locationIds": []
+                }
+              }
+        }
+    ],
     "catalog": [
         {
             "id": "#bakedGoods",
@@ -609,7 +787,6 @@
                 "country": "US"
             },
             "companyName": "Earhart United",
-            "phoneNumber": "1-212-555-4240",
             "note": "A customer for GraphQL sample app"
         },
         {
@@ -625,7 +802,6 @@
                 "country": "GB"
             },
             "companyName": "King's Men",
-            "phoneNumber": "1-212-444-1234",
             "note": "A customer for GraphQL sample app"
         },
         {
@@ -640,7 +816,6 @@
                 "country": "GB"
             },
             "companyName": "Darwin Platform",
-            "phoneNumber": "1-806-123-4555",
             "note": "A customer for GraphQL sample app"
         },
         {
@@ -656,7 +831,6 @@
                 "country": "US"
             },
             "companyName": "Lincoln Property",
-            "phoneNumber": "1-111-666-4240",
             "note": "A customer for GraphQL sample app"
         },
         {
@@ -671,7 +845,6 @@
                 "country": "US"
             },
             "companyName": "Caged Bird Legacy",
-            "phoneNumber": "1-212-555-8888",
             "note": "A customer for GraphQL sample app"
         },
         {
@@ -687,7 +860,6 @@
                 "country": "MX"
             },
             "companyName": "The Two Fridas",
-            "phoneNumber": "1-212-555-4240",
             "note": "A customer for GraphQL sample app"
         }
     ]

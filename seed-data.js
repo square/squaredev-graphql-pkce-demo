@@ -22,19 +22,16 @@ if (!process.env.SQUARE_ACCESS_TOKEN) {
   console.error('.env file missing required field "SQUARE_ACCESS_TOKEN"');
   process.exit(1);
 }
-if (!process.env.LOCATION_ID) {
-  console.error('.env file missing required field "LOCATION_ID"');
-  process.exit(1);
-}
 
-// Be cautious! This script in this Example App is set to run in Production!
 const config = {
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
-  environment: Environment.Production,
+  environment: Environment.Sandbox,
   userAgentDetail: 'sample_app_graphql-sample-app', // Remove or replace this detail when building your own app
 };
 
-const {catalogApi, customersApi, ordersApi, locationsApi} = new Client(config);
+const {catalogApi, customersApi, ordersApi, locationsApi, teamApi} = new Client(
+  config,
+);
 
 // assign a reference id to customers so we can search & delete them later on
 const GRAPHQL_SAMPLE_APP_REFERENCE_ID = 'GRAPHQL-SAMPLE-APP';
@@ -47,7 +44,7 @@ const NUMBER_OF_ORDERS = 10;
 
 // Name of Locations
 // NOTE: IF you change these values make sure to change them in seed-data.json as well
-// These are the name fields
+// These are the `name` fields
 const LOCATION_NAMES = [
   'Ferry Building',
   'Berkeley',
@@ -62,8 +59,6 @@ async function createTestLocations() {
   const locationIds = [];
   for (const locationData of sampleData.locations) {
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      locationData.referenceId = GRAPHQL_SAMPLE_APP_REFERENCE_ID;
       const {
         result: {location},
       } = await locationsApi.createLocation(locationData);
@@ -75,8 +70,37 @@ async function createTestLocations() {
       );
     }
   }
-  console.log('Successfully create locations', locationIds);
+  console.log('Successfully created locations', locationIds);
   return locationIds;
+}
+
+/** Create Team Members
+ * @param {String[]} locationIds
+ * @returns {String[]}
+ */
+async function createTeamMembers(locationIds) {
+  let teamCounter = 0;
+  const teamMembers = [];
+  for (const teamData of sampleData.team) {
+    teamData.teamMember.assignedLocations.locationIds.push(
+      locationIds[teamCounter % 4],
+    );
+    teamData.teamMember.referenceId = GRAPHQL_SAMPLE_APP_REFERENCE_ID;
+    try {
+      const {
+        result: {teamMember},
+      } = await teamApi.createTeamMember(teamData);
+      teamMembers.push(`${teamMember.givenName} ${teamMember.familyName}`);
+    } catch (error) {
+      console.error(
+        `Error when creating location ${teamData.teamMember.givenName} ${teamData.teamMember.familyName}`,
+        error,
+      );
+    }
+    ++teamCounter;
+  }
+  console.log('Successfully created Team Members', teamMembers);
+  return teamMembers;
 }
 
 /**
@@ -150,56 +174,57 @@ async function createCatalogObjects() {
 async function createOrders(customerIds, locationIds, variations) {
   let customerNum = 0;
   let variationNum = 0;
-  let locationNum = 0;
   const orders = [];
   const taxUid = 'sales_tax';
   const maxQuantity = 5; // max quantity we are allowing of an item in an order
-  for (let i = 0; i < NUMBER_OF_ORDERS; i++) {
-    const customerId = customerIds[customerNum % customerIds.length];
-    const locationId = locationIds[locationNum % locationIds.length];
-    const variation = variations[variationNum % variations.length];
-    const quantity = (i % maxQuantity) + 1;
-    try {
-      const {
-        result: {order},
-      } = await ordersApi.createOrder({
-        order: {
-          customerId,
-          lineItems: [
-            {
-              appliedTaxes: [
+  await Promise.all(
+    locationIds.map(async locationId => {
+      for (let i = 0; i < NUMBER_OF_ORDERS; i++) {
+        const customerId = customerIds[customerNum % customerIds.length];
+        const variation = variations[variationNum % variations.length];
+        const quantity = (i % maxQuantity) + 1;
+        try {
+          const {
+            result: {order},
+          } = await ordersApi.createOrder({
+            order: {
+              customerId,
+              lineItems: [
                 {
-                  taxUid,
+                  appliedTaxes: [
+                    {
+                      taxUid,
+                    },
+                  ],
+                  catalogObjectId: variation.id,
+                  catalogVersion: variation.version,
+                  itemType: 'ITEM',
+                  quantity: quantity.toString(),
                 },
               ],
-              catalogObjectId: variation.id,
-              catalogVersion: variation.version,
-              itemType: 'ITEM',
-              quantity: quantity.toString(),
+              locationId,
+              referenceId: GRAPHQL_SAMPLE_APP_REFERENCE_ID,
+              source: {
+                name: GRAPHQL_SAMPLE_APP_REFERENCE_ID,
+              },
+              taxes: [
+                {
+                  catalogObjectId: variation.tax,
+                  scope: 'ORDER',
+                  uid: taxUid,
+                },
+              ],
             },
-          ],
-          locationId,
-          referenceId: GRAPHQL_SAMPLE_APP_REFERENCE_ID,
-          source: {
-            name: GRAPHQL_SAMPLE_APP_REFERENCE_ID,
-          },
-          taxes: [
-            {
-              catalogObjectId: variation.tax,
-              scope: 'ORDER',
-              uid: taxUid,
-            },
-          ],
-        },
-      });
-      orders.push(order);
-    } catch (error) {
-      console.error('Creating order failed', error);
-    }
-    ++customerNum;
-    ++locationNum;
-    ++variationNum;
-  }
+          });
+          orders.push(order);
+        } catch (error) {
+          console.error('Creating order failed', error);
+        }
+        ++customerNum;
+        ++variationNum;
+      }
+    }),
+  );
   console.log(
     'Successfully created orders',
     orders.map(o => o.id),
@@ -231,9 +256,21 @@ async function searchCatalogItems() {
  */
 async function searchOrders() {
   const {
+    result: {locations},
+  } = await locationsApi.listLocations();
+  const locationIds = locations
+    .filter(location => {
+      if (location.status === 'ACTIVE') {
+        if (LOCATION_NAMES.includes(location.name)) {
+          return true;
+        }
+      }
+    })
+    .map(location => location.id);
+  const {
     result: {orders},
   } = await ordersApi.searchOrders({
-    locationIds: [process.env.LOCATION_ID],
+    locationIds,
     query: {
       filter: {
         sourceFilter: {
@@ -283,7 +320,7 @@ async function cancelOrders() {
       await ordersApi.updateOrder(order.id, {
         idempotencyKey: uuidv4(),
         order: {
-          locationId: process.env.LOCATION_ID,
+          locationId: order.locationId,
           state: 'CANCELED',
           version: order.version,
         },
@@ -365,6 +402,47 @@ async function deleteTestCustomers() {
   }
 }
 
+/**
+ * Deactivate Team Members created by the seeding script
+ */
+async function deactivateTeamMembers() {
+  try {
+    let {
+      result: {teamMembers},
+    } = await teamApi.searchTeamMembers({
+      query: {
+        filter: {
+          isOwner: false,
+          status: 'ACTIVE',
+        },
+      },
+    });
+    if (!teamMembers.length) {
+      console.log('No team members to deactivate');
+      return;
+    }
+    const inactiveTeamMembers = {teamMembers: {}};
+    const teamIds = [];
+    teamMembers.forEach(teamMember => {
+      if (teamMember.referenceId === GRAPHQL_SAMPLE_APP_REFERENCE_ID) {
+        inactiveTeamMembers.teamMembers[teamMember.id] = {
+          id: teamMember.id,
+          status: 'INACTIVE',
+        };
+        teamIds.push(teamMember.id);
+      }
+    });
+    if (!Object.keys(inactiveTeamMembers.teamMembers).length) {
+      console.log('no team members to deactivate');
+      return;
+    }
+    await teamApi.bulkUpdateTeamMembers(inactiveTeamMembers);
+    console.log('successfully deactivated team members', teamIds);
+  } catch (error) {
+    console.error('Failed to deactivate teamMembers', error);
+  }
+}
+
 /** Deactivate created locations
  * Locations cannot be deleted, so we deactivate the ones created here
  * And we change the names to something random.
@@ -393,8 +471,8 @@ async function deactivateLocations() {
       return locationsApi.updateLocation(location.id, {
         location: {
           status: 'INACTIVE',
+          name: location.name + uuidv4(),
         },
-        name: location.name + uuidv4(),
       });
     });
     await Promise.all(locationPromises);
@@ -414,12 +492,8 @@ program
   .command('generate')
   .description('creates test data for customers, catalog items and orders')
   .action(async () => {
-    const locationIds = [
-      'L0TDFJ3H2Z6JS',
-      'LF5E8GS15ABTR',
-      'LMA12P1DWR8S6',
-      'L40RRBZK66B30',
-    ]; //await createTestLocations();
+    const locationIds = await createTestLocations();
+    await createTeamMembers(locationIds);
     const customerIds = await createTestCustomers();
     const objects = await createCatalogObjects();
     const variations = filterItemVariations(objects);
@@ -444,10 +518,11 @@ program
       'Are you sure you want to clear all test data created by the seeding script? (y/n) ',
       async ans => {
         if (ans.toUpperCase() === 'Y') {
+          await deactivateTeamMembers();
+          await deleteTestCustomers();
+          await deleteCatalogItems();
+          await cancelOrders();
           await deactivateLocations();
-          // await deleteTestCustomers();
-          // await deleteCatalogItems();
-          // await cancelOrders();
         }
         rl.close();
       },
