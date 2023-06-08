@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {"name":"Debug iOS Hermes","request":"launch","type":"reactnativedirect","cwd":"${workspaceFolder}","platform":"ios"},
+        {
+            "name": "Run and Debug iOS Simulator",
+            "cwd": "${workspaceFolder}",
+            "type": "reactnative",
+            "request": "launch",
+            "platform": "ios",
+            "target": "iPhone 14 Pro"
+
+          }
+
+    ]
+}
