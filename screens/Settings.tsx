@@ -4,11 +4,12 @@ import usePkceOauth from '../helpers/hooks/usePkceOauth';
 import StyledButton from '../components/StyledButton';
 import GreenCheck from '../components/Icons/Checkmark';
 import {useIsAuthed} from '../context/AuthContext';
+import Config from 'react-native-config';
 
 // OAuth config
 const config = {
-  clientId: 'sandbox-sq0idb-VN2nl_i2Cm_1_J8iCihwpA',
-  redirectUri: 'https://pkce-redirect.glitch.me/openapp',
+  clientId: Config.APP_ID,
+  redirectUri: Config.REDIRECT_URL,
   scopes: [
     'MERCHANT_PROFILE_READ',
     'EMPLOYEES_READ',
