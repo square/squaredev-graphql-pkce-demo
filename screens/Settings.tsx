@@ -7,7 +7,7 @@ import {useIsAuthed} from '../context/AuthContext';
 
 // OAuth config
 const config = {
-  clientId: 'sq0idp-0DCsw4zeEMR-LQwExgbdpQ',
+  clientId: 'sandbox-sq0idb-VN2nl_i2Cm_1_J8iCihwpA',
   redirectUri: 'https://pkce-redirect.glitch.me/openapp',
   scopes: [
     'MERCHANT_PROFILE_READ',
@@ -16,9 +16,8 @@ const config = {
     'CUSTOMERS_READ',
   ],
   serviceConfiguration: {
-    authorizationEndpoint: 'https://connect.squareup.com/oauth2/authorize',
-    tokenEndpoint: 'https://connect.squareup.com/oauth2/token',
-    revocationEndpoint: 'https://example.com/oauth2/revoke',
+    authorizationEndpoint:
+      'https://connect.squareupsandbox.com/oauth2/authorize',
   },
 };
 
@@ -29,14 +28,15 @@ const Settings = ({route, navigation}: {route: any; navigation: any}) => {
   useEffect(() => {
     // The App has called back into our settings and we need to let
     // our pkce flow know and to obtain a token.
-    if (route.params) {
+    if (route.params && route.params.state && route.params.code) {
       const {state, code, error, error_description} = route.params;
       // TODO: getting a url fragment on this for some reason.
       // Simply removing the fragment from the value
       const cleanState = state.replace('#_=_', '');
       setRouteParams({state: cleanState, code, error, error_description});
+      navigation.setParams({code: null, state: null});
     }
-  }, [setRouteParams, route.params, oauthError.didError]);
+  }, [setRouteParams, route.params, oauthError.didError, navigation]);
 
   return (
     <View style={styles.container}>

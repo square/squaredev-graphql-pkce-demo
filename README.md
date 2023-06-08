@@ -7,16 +7,28 @@ We have a blog post to accompany this repo here: TODO LINK TO BLOG POST
 **NOTE**: This app is built with React Native and currently only builds for iOS. This app **DOES NOT** use Expo.
 
 
-## Getting Started (Square Setup)
-1. Create a developer account at [Square Developer](developer.squareup.com)
+# Getting Started
+## Square Setup
+1. Create a developer account at [Square Developer](developer.squareup.com) and create a [new app](developer.squareup.com/apps)
 
-2. copy `.env.example` to `.env` and grab the accessToken from your developer account and place it's value in the newly created `.env` file. We are going to be using the production API's in this example. 
+1. Add a new Sandbox Testing account in your app. In this Example we named ours 'Flour Power'. 
 
-3. We are going to seed the account with some data that can be used for the application.
+1. Click the `...` next to the newly created sandbox seller and click `View Details`. Use the access token from this screen in the next step.
 
-Food for thought: Just use the public ID for Neon Nexus, that way users' don't have to create 2 developer accounts.
 
-## Getting started (React Native Set up)
+1. copy `.env.example` to `.env`. Use the accessToken from above place it's value in the newly created `.env` file.
+
+1. Run this next command to seed data into the test account that can be used for the application.
+    ```
+    $ npm run seed
+    ```
+
+
+## Apple iOS Set up
+
+This app utilizes [Universal Links](https://developer.apple.com/ios/universal-links/). In order to use Universal links you must have an Apple Developer Account. You will need a web server running that can host a [apple-app-site-association](https://developer.apple.com/documentation/xcode/supporting-associated-domains?language=objc) file. We used https://glitch.com to handle this.
+
+## React Native Set up
 
 1. Install node modules
 `npm install`
@@ -30,3 +42,17 @@ Food for thought: Just use the public ID for Neon Nexus, that way users' don't h
 When the app is running you can press `i` in the interactive metro menu to launch the app on iOS.
 
 
+
+notes: 
+
+App didn't start when Xcode wasn't open. Need to do a full reboot, and test.
+
+For the first time running the flow, need to click allow on the smart banner
+
+Display owner in the Team list - help prevent breakage.
+
+
+LocationID is currently needed in the code, but this .env dependency should be removed.
+
+Confirmation Prompt that says:
+This will add new locations to your PRODUCTION Square account. These locations cannot be deleted (only deactivated). Do you wish to proceed? 

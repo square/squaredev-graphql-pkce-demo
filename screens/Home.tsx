@@ -11,6 +11,7 @@ import {
 import BusinessInfo from '../components/BusinessInfo';
 import Table from '../components/Table';
 import LocationSelect from '../components/LocationSelect';
+import {ScrollView} from 'react-native-gesture-handler';
 
 interface LocationData {
   name?: string;
@@ -66,7 +67,7 @@ const Home = ({navigation}: {navigation: any}) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {isLoading ? (
           <View style={styles.spinnerContainer}>
             <ActivityIndicator size="large" />
@@ -109,7 +110,7 @@ const Home = ({navigation}: {navigation: any}) => {
             />
           </View>
         )}
-      </View>
+      </ScrollView>
     </>
   );
 };

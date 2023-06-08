@@ -3,7 +3,7 @@ import {SecureGet} from './index';
 export const queryLocation = async (id: string) => {
   if (id) {
     const locationResponse = await fetch(
-      `https://connect.squareup.com/v2/locations/${id}`,
+      `https://connect.squareupsandbox.com/v2/locations/${id}`,
       {
         method: 'GET',
         headers: {
@@ -18,7 +18,7 @@ export const queryLocation = async (id: string) => {
 
 export const queryLocations = async () => {
   const locationResponse = await fetch(
-    'https://connect.squareup.com/v2/locations',
+    'https://connect.squareupsandbox.com/v2/locations',
     {
       method: 'GET',
       headers: {
@@ -27,13 +27,13 @@ export const queryLocations = async () => {
     },
   );
   const {locations} = await locationResponse.json();
-  return locations;
+  return locations.filter(location => location.status === 'ACTIVE');
 };
 
 export const queryTeamMemebers = async (id: string) => {
   if (id) {
     const teamMemberResponse = await fetch(
-      'https://connect.squareup.com/v2/team-members/search',
+      'https://connect.squareupsandbox.com/v2/team-members/search',
       {
         method: 'POST',
         headers: {
@@ -44,7 +44,6 @@ export const queryTeamMemebers = async (id: string) => {
           query: {
             filter: {
               location_ids: [id],
-              is_owner: false,
             },
           },
         }),
@@ -57,15 +56,18 @@ export const queryTeamMemebers = async (id: string) => {
 
 const graphqlRequest = async (query: string) => {
   try {
-    const response = await fetch('https://connect.squareup.com/alpha/graphql', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${await SecureGet('squareAccessToken')}`,
+    const response = await fetch(
+      'https://connect.squareupsandbox.com/alpha/graphql',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await SecureGet('squareAccessToken')}`,
+        },
+        body: JSON.stringify({query}),
       },
-      body: JSON.stringify({query}),
-    });
+    );
     const ret = await response.json();
     if (ret.errors) {
       ret.errors.forEach((error: string) => {
@@ -94,6 +96,7 @@ export const graphqlListLocations = async (merchantId: string) => {
             nodes {
               id
               name
+              status
             }
           }
         }
@@ -101,7 +104,9 @@ export const graphqlListLocations = async (merchantId: string) => {
     }
 `;
   const {merchants} = await graphqlRequest(query);
-  return merchants.nodes[0].locations.nodes;
+  return merchants.nodes[0].locations.nodes.filter(
+    location => location.status === 'ACTIVE',
+  );
 };
 
 export const graphqlListOrders = async ({

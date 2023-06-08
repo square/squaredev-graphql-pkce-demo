@@ -35,6 +35,18 @@ const usePkceOauth = config => {
         didError: true,
         description: routeParams.error_description,
       });
+      return;
+    }
+    if (
+      routeParams.state &&
+      routeParams.state !== localParams.state &&
+      !hasToken
+    ) {
+      setOauthError({
+        didError: true,
+        description: 'Square state does not match the one we created',
+      });
+      return;
     }
     if (routeParams.code && !hasToken) {
       // If we have the Auth Code from the Authorization flow,
@@ -43,7 +55,7 @@ const usePkceOauth = config => {
       // for the authorization flow.
       const obtainToken = async () => {
         const tokenResponse = await fetch(
-          'https://connect.squareup.com/oauth2/token',
+          'https://connect.squareupsandbox.com/oauth2/token',
           {
             method: 'POST',
             headers: {
@@ -72,13 +84,14 @@ const usePkceOauth = config => {
           key: 'squareRefreshToken',
           value: response.refresh_token,
         });
-        await AsyncStorage.setItem('merchantId', response.merchant_id);
+        if (response.merchant_id) {
+          await AsyncStorage.setItem('merchantId', response.merchant_id);
+        }
         setHasToken(true);
         setOauthError({
           didError: false,
           description: '',
         });
-        routeParams.code = null;
       };
       obtainToken();
     }

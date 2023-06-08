@@ -35,17 +35,6 @@
   return true;
 }
 
-// For regular linking
-- (BOOL)application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString *, id> *)options
-{
-  if ([self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url]) {
-    return YES;
-  }
-  return [RCTLinkingManager application:app openURL:url options:options];
-}
-
 // Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
  restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
