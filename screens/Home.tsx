@@ -11,7 +11,10 @@ import {
 import BusinessInfo from '../components/BusinessInfo';
 import Table from '../components/Table';
 import LocationSelect from '../components/LocationSelect';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
+import { SecureDelete } from '../helpers';
+import { useLogin } from '../context/LoginContext';
+
 
 interface LocationData {
   name?: string;
@@ -22,7 +25,8 @@ interface LocationData {
 }
 
 const Home = ({navigation}: {navigation: any}) => {
-  const {hasToken} = useIsAuthed();
+  const {hasToken, setHasToken} = useIsAuthed();
+  const {dispatch} = useLogin();
   const [selectedLocation, setSelectedLocation] = useState('');
   const [locationList, setLocationList] = useState(['1']);
   const [locationData, setLocationData] = useState<LocationData>({});
@@ -96,6 +100,16 @@ const Home = ({navigation}: {navigation: any}) => {
                 navigation.navigate('Orders');
               }}
             />
+            <StyledButton
+              title="Logout"
+              style={styles.marginTop}
+              onPress={async () => {
+                await SecureDelete('squareAccessToken');
+                await SecureDelete('squareRefreshToken');
+                setHasToken(false);
+                dispatch({type: 'SIGN_OUT', token: null});
+              }}
+            />
           </View>
         ) : (
           <View style={styles.center}>
@@ -120,6 +134,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5DEB3',
     height: '100%',
+  },
+  marginTop: {
+    marginTop: 10,
   },
   spinnerContainer: {
     justifyContent: 'center',

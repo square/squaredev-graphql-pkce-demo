@@ -34,11 +34,17 @@ export default function Index() {
           <Stack.Screen name="SignIn" component={SignIn} />
         </Stack.Navigator>
       ) : (
-        <Drawer.Navigator initialRouteName="Home" drawerContent={DrawerLogout}>
-          <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="Settings" component={Settings} />
-          <Drawer.Screen name="Orders" component={OrderList} />
-        </Drawer.Navigator>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="Orders" component={OrderList} />
+        </Stack.Navigator>
+        // </Stack.Navigator>
+        // <Drawer.Navigator initialRouteName="Home" drawerContent={DrawerLogout}>
+        //   <Drawer.Screen name="Home" component={Home} />
+        //   <Drawer.Screen name="Settings" component={Settings} />
+        //   <Drawer.Screen name="Orders" component={OrderList} />
+        // </Drawer.Navigator>
       )}
     </>
   );
