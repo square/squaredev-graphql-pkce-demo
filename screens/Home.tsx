@@ -11,7 +11,9 @@ import {
 import BusinessInfo from '../components/BusinessInfo';
 import Table from '../components/Table';
 import LocationSelect from '../components/LocationSelect';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
+import {SecureDelete} from '../helpers';
+import {useLogin} from '../context/LoginContext';
 
 interface LocationData {
   name?: string;
@@ -22,7 +24,8 @@ interface LocationData {
 }
 
 const Home = ({navigation}: {navigation: any}) => {
-  const {hasToken} = useIsAuthed();
+  const {hasToken, setHasToken} = useIsAuthed();
+  const {dispatch} = useLogin();
   const [selectedLocation, setSelectedLocation] = useState('');
   const [locationList, setLocationList] = useState(['1']);
   const [locationData, setLocationData] = useState<LocationData>({});
@@ -74,6 +77,16 @@ const Home = ({navigation}: {navigation: any}) => {
           </View>
         ) : hasToken ? (
           <View style={styles.body}>
+            <StyledButton
+              title="Logout"
+              style={styles.logout}
+              onPress={async () => {
+                await SecureDelete('squareAccessToken');
+                await SecureDelete('squareRefreshToken');
+                setHasToken(false);
+                dispatch({type: 'SIGN_OUT', token: null});
+              }}
+            />
             <LocationSelect
               selectedLocation={selectedLocation}
               changeHandler={handlePickerChange}
@@ -89,13 +102,14 @@ const Home = ({navigation}: {navigation: any}) => {
                 />
               </View>
             )}
-            {teamMembers.length ? <Table data={teamMembers} /> : null}
             <StyledButton
               title="View Orders"
+              style={{marginBottom: 10}}
               onPress={() => {
                 navigation.navigate('Orders');
               }}
             />
+            {teamMembers.length ? <Table data={teamMembers} /> : null}
           </View>
         ) : (
           <View style={styles.center}>
@@ -120,6 +134,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5DEB3',
     height: '100%',
+  },
+  logout: {
+    marginBottom: 10,
+    backgroundColor: '#AF3D4A',
   },
   spinnerContainer: {
     justifyContent: 'center',
