@@ -16,15 +16,17 @@ const {Client, Environment} = require('square');
 const readline = require('readline');
 const {v4: uuidv4} = require('uuid');
 const {program} = require('commander');
-require('dotenv').config();
 
-if (!process.env.SQUARE_ACCESS_TOKEN) {
-  console.error('.env file missing required field "SQUARE_ACCESS_TOKEN"');
+// PLACE THE VALUE OF YOUR SQUARE ACCESS TOKEN HERE
+const SQUARE_ACCESS_TOKEN = "";
+
+if (!SQUARE_ACCESS_TOKEN) {
+  console.error('"SQUARE_ACCESS_TOKEN" does not have a defined value!');
   process.exit(1);
 }
 
 const config = {
-  accessToken: process.env.SQUARE_ACCESS_TOKEN,
+  accessToken: SQUARE_ACCESS_TOKEN,
   environment: Environment.Sandbox,
   userAgentDetail: 'sample_app_graphql-sample-app', // Remove or replace this detail when building your own app
 };

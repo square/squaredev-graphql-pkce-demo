@@ -15,7 +15,7 @@ We have a blog post to accompany this repo [here](https://developer.squareup.com
 1. Click the `...` next to the newly created sandbox seller and click `View Details`. Use the `access token` from this screen in the next step.
 
 
-1. copy `.env.example` to `.env`. Use the accessToken from above place it's value in the newly created `.env` file.
+1. Use the accessToken from above place it's value into the `SQUARE_ACCESS_TOKEN` variable in `seed-data.js`. We are not saving this value in our `.env` because the value would get packaged into our app - which would be a security nightmare, and undo the purpose of using PKCE!
 
 1. Install node modules and then run the command to seed sample data into your test seller account.
     ```
@@ -24,7 +24,7 @@ We have a blog post to accompany this repo [here](https://developer.squareup.com
     ```
 1. Configure your app to have a redirect URL - https://developer.squareup.com/apps/YOUR_APP_ID/oauth
 
-1. Paste the value of your `Application Id` and `Redirect URL` into the values in the `.env` file
+1. Copy `.env.example` to `.env`. Paste the value of your `Application Id` and `Redirect URL` into the values in the `.env` file
 
 
 *note*: you can run `npm run clear` to delete the test data from the seller account as well. You can also easily delete the test seller, and create a new one. Just repeat step 3 after doing so.
