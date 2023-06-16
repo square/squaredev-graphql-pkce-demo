@@ -50,9 +50,6 @@ We have noticed that the app runs better on an iPhone 14, but might default to o
 
 This app utilizes [Android App Links](https://developer.android.com/training/app-links#android-app-links). In order to implement this you will need to have web server running that can host a file called. [assetLinks.json](https://developer.android.com/training/app-links/verify-android-applinks#web-assoc). The `package name` for this repo is `com.squaredevgraphqlpkce`. We used https://glitch.com to handle hosting this file.
 
-Make sure that when you run `echo $JAVA_HOME` that this path is returned
-`/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home` - if not refer to the react-native environment instructions.
-
 ### Android Troubleshooting
 Getting React native to work with Android is a bit cumbersome. Please follow [these instructions](https://reactnative.dev/docs/environment-setup) as closely as you can. 
 
