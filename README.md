@@ -1,4 +1,4 @@
-# Square Dev GraphQL and PKCE Example Application
+# GraphQL and PKCE Example Application
 
 This is a demo mobile app that is intended to help you understand / implement / play with a mobile application that can help you understand some use cases and implementations for PKCE and GraphQL!
 
