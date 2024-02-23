@@ -8,11 +8,11 @@ We have a blog post to accompany this repo [here](https://developer.squareup.com
 
 # Getting Started
 ## Square Setup
-1. Create a developer account at [Square Developer](developer.squareup.com) and create a [new app](developer.squareup.com/apps)
+1. Create a developer account at [Square Developer](https://developer.squareup.com) and create a [new app](https://developer.squareup.com/apps)
 
-1. Add a new Sandbox Testing account in your app. In this Example we named ours 'Flour Power'. 
+1. Navigate to the [sandbox test accounts](https://developer.squareup.com/console/en/sandbox-test-accounts) and create a new test account. In this Example we named ours 'Flour Power'. 
 
-1. Click the `...` next to the newly created sandbox seller and click `View Details`. Use the `access token` from this screen in the next step.
+1. Click the name of the newly created sandbox seller. Open the drop down for your app and use the `access token` from this screen in the next step.
 
 
 1. Use the accessToken from above place it's value into the `SQUARE_ACCESS_TOKEN` variable in `seed-data.js`. We are not saving this value in our `.env` because the value would get packaged into our app - which would be a security nightmare, and undo the purpose of using PKCE!
@@ -86,7 +86,7 @@ Once your app has booted on the emulator and you can see the Neon Nexus login pa
 
 1. In the emulator, move out of the app and open safari.
 
-1. Navigate to https://developer.squareup.com/apps
+1. Navigate to [the developer dashboard](https://developer.squareup.com/apps)
 
 1. Login to your Square Developer account.
 
